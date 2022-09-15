@@ -1,18 +1,19 @@
 import styled from "styled-components";
+import { theme } from "../../utils/theme";
 
 export const Background = styled.div`
   display: flex;
   position: fixed;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.28);
+  background-color: ${theme.colors.background};
   height: 100%;
   width: 100%;
 `;
 
 export const ModalContainer = styled.div`
   padding: 20px;
-  background-color: white;
+  background-color: ${theme.colors.white};
   width: 40%;
 `;
 
@@ -44,4 +45,27 @@ export const PosterImage = styled.img`
   width: 330px;
   height: 480px;
   margin-right: 20px;
+`;
+
+export const MovieDetails = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+export const GenreContainer = styled.div`
+  display: flex;
+  margin-bottom: 3px;
+  margin-left: 10px;
+`;
+
+export const GenreText = styled.p`
+  background-color: ${theme.colors.blue};
+  margin: 0px;
+  padding: 5px;
+  border-radius: 5px;
+  color: ${theme.colors.white};
+`;
+
+export const CenterText = styled.p`
+  text-align: center;
 `;

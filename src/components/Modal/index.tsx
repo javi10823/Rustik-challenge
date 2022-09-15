@@ -8,17 +8,22 @@ import {
   Title,
   Poster,
   PosterImage,
+  GenreContainer,
+  GenreText,
+  MovieDetails,
+  CenterText,
 } from "./styles";
+import { Movie, Genre } from "../../types";
 
 interface Props {
-  item: any;
+  item: Movie;
   onClose: () => void;
 }
 
 const key = "6cd53bd1c45a1823e0dd506d78dd9b07";
 
 const Modal: FC<Props> = ({ item, onClose }) => {
-  const [genres, setGenres] = useState<any>([]);
+  const [genres, setGenres] = useState<Genre[]>([]);
 
   useEffect(() => {
     axios
@@ -35,7 +40,7 @@ const Modal: FC<Props> = ({ item, onClose }) => {
           <CloseIcon onClick={onClose}>X</CloseIcon>
         </Close>
         <Title>{item.title}</Title>
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <MovieDetails>
           <Poster
             style={{
               border: item.poster_path ? "" : "1px solid",
@@ -47,7 +52,7 @@ const Modal: FC<Props> = ({ item, onClose }) => {
                 alt="poster"
               />
             ) : (
-              <p style={{ textAlign: "center" }}>No Image</p>
+              <CenterText>No Image</CenterText>
             )}
           </Poster>
           <div>
@@ -72,29 +77,15 @@ const Modal: FC<Props> = ({ item, onClose }) => {
             <p>
               <b>Genres:</b>
             </p>
-            {item.genre_ids.map((genre: any) => (
-              <div
-                style={{
-                  display: "flex",
-                  marginBottom: 3,
-                  marginLeft: 10,
-                }}
-              >
-                <p
-                  style={{
-                    backgroundColor: "blue",
-                    margin: 0,
-                    padding: 5,
-                    borderRadius: 5,
-                    color: "white",
-                  }}
-                >
-                  {genres.find(({ id }: any) => id === genre)?.name}
-                </p>
-              </div>
+            {item.genre_ids.map((genre) => (
+              <GenreContainer>
+                <GenreText>
+                  {genres.find(({ id }) => id === genre)?.name}
+                </GenreText>
+              </GenreContainer>
             ))}
           </div>
-        </div>
+        </MovieDetails>
         <p>
           <b>Overview</b>
         </p>

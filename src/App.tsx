@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import axios from "axios";
 import Pagination from "@mui/material/Pagination";
 import Modal from "./components/Modal";
 import {
@@ -11,38 +10,31 @@ import {
   HeaderImage,
   CardImage,
 } from "./styles";
-
-const key = "6cd53bd1c45a1823e0dd506d78dd9b07";
+import { Movie, MovieData } from "./types";
+import { getMovies, getMoviesSearch } from "./api";
+import { theme } from "./utils/theme";
 
 const App = () => {
-  const [data, setData] = useState<any>([]);
+  const [data, setData] = useState<MovieData>();
   const [filter, setFiler] = useState("");
   const [ranking, setRanking] = useState(0);
   const [page, setPage] = useState(1);
-  const [selected, setSelected] = useState<any>(null);
+  const [selected, setSelected] = useState<Movie | null>(null);
 
   useEffect(() => {
     if (filter === "") {
-      axios
-        .get(
-          `https://api.themoviedb.org/3/movie/popular?api_key=${key}&page=${page}`
-        )
-        .then((res) => {
-          setData(res.data);
-        });
+      getMovies(page).then((res) => {
+        setData(res.data);
+      });
     } else {
-      axios
-        .get(
-          `https://api.themoviedb.org/3/search/movie?api_key=${key}&language=en-US&query=${filter}&page=${page}`
-        )
-        .then((res) => {
-          setData(res.data);
-        });
+      getMoviesSearch(page, filter).then((res) => {
+        setData(res.data);
+      });
     }
   }, [filter, page]);
 
   const renderMovies = useMemo(() => {
-    if (data.results) {
+    if (data?.results) {
       return data.results
         .filter(
           ({ vote_average }: any) =>
@@ -90,7 +82,7 @@ const App = () => {
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
           <button
             key={i}
-            style={ranking >= i ? { backgroundColor: "yellow" } : {}}
+            style={ranking >= i ? { backgroundColor: theme.colors.yellow } : {}}
             onClick={() => {
               ranking === i ? setRanking(0) : setRanking(i);
               setPage(1);
@@ -102,7 +94,7 @@ const App = () => {
       </div>
       <MoviesContainer>{renderMovies}</MoviesContainer>
       <Pagination
-        count={data.total_pages > 500 ? 500 : data.total_pages}
+        count={data?.total_pages! > 500 ? 500 : data?.total_pages}
         onChange={(_e, p) => {
           setPage(p);
           window.scrollTo(0, 0);
