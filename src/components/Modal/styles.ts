@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { theme } from "../../utils/theme";
+import { AiFillCloseCircle } from "react-icons/ai";
 
 export const Background = styled.div`
   display: flex;
@@ -17,19 +18,17 @@ export const ModalContainer = styled.div`
   width: 40%;
 `;
 
-export const Close = styled.div`
+export const Header = styled.div`
   display: flex;
-  justify-content: end;
-`;
-
-export const CloseIcon = styled.p`
-  margin: 0px;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const Title = styled.p`
+  flex-grow: 1;
   text-align: center;
   font-weight: bold;
-  margin-block: 10px;
+  font-size: 20px;
 `;
 
 export const Poster = styled.div`
@@ -68,4 +67,9 @@ export const GenreText = styled.p`
 
 export const CenterText = styled.p`
   text-align: center;
+`;
+
+export const Close = styled(AiFillCloseCircle)`
+  width: 27px;
+  height: 27px;
 `;

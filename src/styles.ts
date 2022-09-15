@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { AiFillStar } from "react-icons/ai";
 
 export const Container = styled.div`
   display: flex;
@@ -47,4 +48,15 @@ export const MovieCard = styled.div`
 export const CardImage = styled.img`
   width: 100%;
   height: 100%;
+`;
+
+export const Star = styled(AiFillStar)`
+  width: 20px;
+  height: 20px;
+`;
+
+export const NoMovieText = styled.p`
+  font-size: 20px;
+  font-weight: bold;
+  margin-block: 60px;
 `;

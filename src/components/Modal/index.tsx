@@ -2,8 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import {
   Background,
   ModalContainer,
-  Close,
-  CloseIcon,
+  Header,
   Title,
   Poster,
   PosterImage,
@@ -11,6 +10,7 @@ import {
   GenreText,
   MovieDetails,
   CenterText,
+  Close,
 } from "./styles";
 import { Movie, Genre } from "../../types";
 import { getGenres } from "../../api";
@@ -32,10 +32,10 @@ const Modal: FC<Props> = ({ item, onClose }) => {
   return (
     <Background>
       <ModalContainer>
-        <Close>
-          <CloseIcon onClick={onClose}>X</CloseIcon>
-        </Close>
-        <Title>{item.title}</Title>
+        <Header>
+          <Title>{item.title}</Title>
+          <Close onClick={onClose} />
+        </Header>
         <MovieDetails>
           <Poster
             style={{

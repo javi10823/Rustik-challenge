@@ -9,6 +9,8 @@ import {
   MovieCard,
   HeaderImage,
   CardImage,
+  Star,
+  NoMovieText,
 } from "./styles";
 import { Movie, MovieData } from "./types";
 import { getMovies, getMoviesSearch } from "./api";
@@ -35,29 +37,31 @@ const App = () => {
 
   const renderMovies = useMemo(() => {
     if (data?.results) {
-      return data.results
-        .filter(
-          ({ vote_average }) =>
-            ranking === 0 || Math.round(vote_average) === ranking
-        )
-        .map((item) => (
-          <MovieCard
-            onClick={setSelected.bind(null, item)}
-            key={item.id}
-            style={{
-              border: item.poster_path ? "" : "1px solid",
-            }}
-          >
-            {item.poster_path ? (
-              <CardImage
-                src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                alt={item.title}
-              />
-            ) : (
-              <p>{item.title}</p>
-            )}
-          </MovieCard>
-        ));
+      const filteredData = data.results.filter(
+        ({ vote_average }) =>
+          ranking === 0 || Math.round(vote_average) === ranking
+      );
+      if (filteredData.length === 0) {
+        return <NoMovieText>No movies found</NoMovieText>;
+      }
+      return filteredData.map((item) => (
+        <MovieCard
+          onClick={setSelected.bind(null, item)}
+          key={item.id}
+          style={{
+            border: item.poster_path ? "" : "1px solid",
+          }}
+        >
+          {item.poster_path ? (
+            <CardImage
+              src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+              alt={item.title}
+            />
+          ) : (
+            <p>{item.title}</p>
+          )}
+        </MovieCard>
+      ));
     }
   }, [data, ranking]);
 
@@ -72,7 +76,10 @@ const App = () => {
           type="text"
           name="name"
           placeholder="Search"
-          onChange={(a) => setFiler(a.target.value)}
+          onChange={(a) => {
+            setPage(1);
+            setFiler(a.target.value);
+          }}
         />
       </HeaderContainer>
       <p>
@@ -80,20 +87,19 @@ const App = () => {
       </p>
       <div>
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-          <button
+          <Star
             key={i}
-            style={ranking >= i ? { backgroundColor: theme.colors.yellow } : {}}
+            style={ranking >= i ? { color: theme.colors.yellow } : {}}
             onClick={() => {
               ranking === i ? setRanking(0) : setRanking(i);
               setPage(1);
             }}
-          >
-            {i}
-          </button>
+          />
         ))}
       </div>
       <MoviesContainer>{renderMovies}</MoviesContainer>
       <Pagination
+        page={page}
         count={data?.total_pages! > 500 ? 500 : data?.total_pages}
         onChange={(_e, p) => {
           setPage(p);
