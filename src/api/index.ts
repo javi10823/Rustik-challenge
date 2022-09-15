@@ -11,3 +11,6 @@ export const getMoviesSearch = (page: number, filter: string) =>
   axios.get(
     `${apiUrl}search/movie?api_key=${key}&language=en-US&query=${filter}&page=${page}`
   );
+
+export const getGenres = () =>
+  axios.get(`${apiUrl}genre/movie/list?api_key=${key}`);

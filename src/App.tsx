@@ -37,10 +37,10 @@ const App = () => {
     if (data?.results) {
       return data.results
         .filter(
-          ({ vote_average }: any) =>
+          ({ vote_average }) =>
             ranking === 0 || Math.round(vote_average) === ranking
         )
-        .map((item: any) => (
+        .map((item) => (
           <MovieCard
             onClick={setSelected.bind(null, item)}
             key={item.id}

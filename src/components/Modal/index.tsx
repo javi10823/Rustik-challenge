@@ -14,23 +14,20 @@ import {
   CenterText,
 } from "./styles";
 import { Movie, Genre } from "../../types";
+import { getGenres } from "../../api";
 
 interface Props {
   item: Movie;
   onClose: () => void;
 }
 
-const key = "6cd53bd1c45a1823e0dd506d78dd9b07";
-
 const Modal: FC<Props> = ({ item, onClose }) => {
   const [genres, setGenres] = useState<Genre[]>([]);
 
   useEffect(() => {
-    axios
-      .get(`https://api.themoviedb.org/3/genre/movie/list?api_key=${key}`)
-      .then((res) => {
-        setGenres(res.data.genres);
-      });
+    getGenres().then((res) => {
+      setGenres(res.data.genres);
+    });
   }, []);
 
   return (
