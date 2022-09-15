@@ -31,7 +31,7 @@ const Modal: FC<Props> = ({ item, onClose, genres }) => (
         <Poster withBorder={Boolean(item.poster_path)}>
           {item.poster_path ? (
             <PosterImage
-              src={`${process.env.IMAGE_URL}${item.poster_path}`}
+              src={`${process.env.REACT_APP_IMAGE_URL}${item.poster_path}`}
               alt="poster"
             />
           ) : (

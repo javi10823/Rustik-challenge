@@ -15,12 +15,10 @@ import {
 import { Genre, Movie, MovieData } from "./types";
 import { getGenres, getMovies, getMoviesSearch } from "./api";
 import { theme } from "./utils/theme";
-import * as dotenv from "dotenv";
 
 let filterTimeout: NodeJS.Timeout;
 
 const App = () => {
-  dotenv.config();
   const [data, setData] = useState<MovieData>();
   const [filter, setFiler] = useState("");
   const [ranking, setRanking] = useState(0);
@@ -63,11 +61,10 @@ const App = () => {
         <MovieCard
           onClick={setSelected.bind(null, item)}
           key={item.id}
-          withBorder={Boolean(item.poster_path)}
-        >
+          withBorder={Boolean(item.poster_path)}>
           {item.poster_path ? (
             <CardImage
-              src={`${process.env.IMAGE_URL}${item.poster_path}`}
+              src={`${process.env.REACT_APP_IMAGE_URL}${item.poster_path}`}
               alt={item.title}
             />
           ) : (
