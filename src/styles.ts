@@ -43,6 +43,8 @@ export const MovieCard = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  border: ${(props: { withBorder: boolean }) =>
+    props.withBorder ? "" : "1px solid"};
 `;
 
 export const CardImage = styled.img`

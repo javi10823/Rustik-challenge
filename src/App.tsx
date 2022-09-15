@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Pagination from "@mui/material/Pagination";
-import Modal from "./components/Modal";
+import Modal from "./ui/Modal";
 import {
   Container,
   HeaderContainer,
@@ -12,28 +12,43 @@ import {
   Star,
   NoMovieText,
 } from "./styles";
-import { Movie, MovieData } from "./types";
-import { getMovies, getMoviesSearch } from "./api";
+import { Genre, Movie, MovieData } from "./types";
+import { getGenres, getMovies, getMoviesSearch } from "./api";
 import { theme } from "./utils/theme";
+import * as dotenv from "dotenv";
+
+let filterTimeout: NodeJS.Timeout;
 
 const App = () => {
+  dotenv.config();
   const [data, setData] = useState<MovieData>();
   const [filter, setFiler] = useState("");
   const [ranking, setRanking] = useState(0);
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<Movie | null>(null);
+  const [genresList, setGenresList] = useState<Genre[]>([]);
+
+  useEffect(() => {
+    getGenres().then(({ data: { genres } }) => {
+      setGenresList(genres);
+    });
+  }, []);
 
   useEffect(() => {
     if (filter === "") {
-      getMovies(page).then((res) => {
-        setData(res.data);
-      });
+      getMovies(page).then((res) => setData(res.data));
     } else {
-      getMoviesSearch(page, filter).then((res) => {
-        setData(res.data);
-      });
+      getMoviesSearch(page, filter).then((res) => setData(res.data));
     }
   }, [filter, page]);
+
+  const onSearch = (a: { target: { value: string } }) => {
+    clearTimeout(filterTimeout);
+    filterTimeout = setTimeout(() => {
+      setPage(1);
+      setFiler(a.target.value);
+    }, 500);
+  };
 
   const renderMovies = useMemo(() => {
     if (data?.results) {
@@ -48,13 +63,11 @@ const App = () => {
         <MovieCard
           onClick={setSelected.bind(null, item)}
           key={item.id}
-          style={{
-            border: item.poster_path ? "" : "1px solid",
-          }}
+          withBorder={Boolean(item.poster_path)}
         >
           {item.poster_path ? (
             <CardImage
-              src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+              src={`${process.env.IMAGE_URL}${item.poster_path}`}
               alt={item.title}
             />
           ) : (
@@ -76,10 +89,7 @@ const App = () => {
           type="text"
           name="name"
           placeholder="Search"
-          onChange={(a) => {
-            setPage(1);
-            setFiler(a.target.value);
-          }}
+          onChange={onSearch}
         />
       </HeaderContainer>
       <p>
@@ -107,7 +117,11 @@ const App = () => {
         }}
       />
       {selected && (
-        <Modal item={selected} onClose={setSelected.bind(null, null)} />
+        <Modal
+          item={selected}
+          onClose={setSelected.bind(null, null)}
+          genres={genresList}
+        />
       )}
     </Container>
   );

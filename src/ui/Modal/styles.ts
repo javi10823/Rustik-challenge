@@ -38,6 +38,8 @@ export const Poster = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  border: ${(props: { withBorder: boolean }) =>
+    props.withBorder ? "" : "1px solid"};
 `;
 
 export const PosterImage = styled.img`
